@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorry, Timi 🤍</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Marcellus&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wine: #5b1f2b;
+    --wine-deep: #3c1420;
+    --blush: #f7e3e1;
+    --paper: #fff8f3;
+    --gold: #b98a4e;
+    --rose: #c96a5e;
+    --ink: #2c1216;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{
+    font-family: 'Marcellus', serif;
+    letter-spacing: 0.02em;
+  }
+  ::selection{ background: var(--rose); color: #fff; }
+
+  /* ---------- floating petals ---------- */
+  #petals{ position:fixed; inset:0; pointer-events:none; z-index:5; overflow:hidden; }
+  .petal{
+    position:absolute; top:-5%;
+    font-size: 18px;
+    opacity:0.75;
+    animation: fall linear infinite;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.08));
+  }
+  @keyframes fall{
+    0%{ transform: translateY(-10vh) translateX(0) rotate(0deg); }
+    100%{ transform: translateY(110vh) translateX(var(--drift,40px)) rotate(360deg); }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding: 40px 20px;
+    position:relative;
+    background:
+      radial-gradient(ellipse at 50% 0%, var(--blush) 0%, transparent 60%),
+      linear-gradient(180deg, var(--paper) 0%, #fdf1ee 100%);
+  }
+  .eyebrow{
+    font-family:'Marcellus', serif;
+    text-transform:uppercase;
+    letter-spacing:0.35em;
+    font-size:12px;
+    color:var(--rose);
+    margin-bottom:22px;
+    opacity:0;
+    animation: rise 1s ease forwards 0.2s;
+  }
+  .hero h1{
+    font-size: clamp(42px, 9vw, 96px);
+    color: var(--wine-deep);
+    line-height:1.05;
+    opacity:0;
+    animation: rise 1.1s ease forwards 0.5s;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color: var(--rose);
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+  }
+  .script{ font-family:'Great Vibes', cursive; }
+  .hero .script-line{
+    font-size: clamp(30px, 5vw, 46px);
+    color: var(--rose);
+    margin-top:6px;
+    opacity:0;
+    animation: rise 1.1s ease forwards 0.7s;
+  }
+  .hero p.sub{
+    margin-top:22px;
+    font-size: clamp(18px, 2.4vw, 24px);
+    color: #6b3d3d;
+    max-width:560px;
+    opacity:0;
+    animation: rise 1.1s ease forwards 0.85s;
+  }
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(24px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  .scroll-cue{
+    margin-top:56px;
+    font-size:13px;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--gold);
+    opacity:0;
+    animation: rise 1s ease forwards 1.3s, bob 2.4s ease-in-out infinite 2.3s;
+  }
+  @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
+
+  section{ position:relative; z-index:2; padding: 110px 20px; max-width: 880px; margin:0 auto; }
+  .section-label{
+    text-align:center; text-transform:uppercase; letter-spacing:0.3em;
+    font-size:12px; color:var(--rose); font-family:'Marcellus',serif; margin-bottom:14px;
+  }
+  .section-title{ text-align:center; font-size: clamp(30px,5vw,48px); color:var(--wine-deep); margin-bottom:50px; }
+
+  /* ---------- letter ---------- */
+  .letter{
+    background: #fffdfb;
+    border: 1px solid #ecd9d2;
+    border-radius: 6px;
+    padding: 56px clamp(24px,6vw,72px);
+    box-shadow: 0 30px 60px -30px rgba(91,31,43,0.25);
+    position:relative;
+  }
+  .letter::before{
+    content:"❦";
+    position:absolute; top:-24px; left:50%; transform:translateX(-50%);
+    background:var(--paper); padding:0 14px; color:var(--rose); font-size:22px;
+  }
+  .letter p{ font-size:21px; line-height:1.8; color:#3a1f22; margin-bottom:20px; }
+  .letter .sign{ text-align:right; font-family:'Marcellus',serif; color:var(--wine); font-size:20px; margin-top:10px; }
+
+  /* ---------- song player ---------- */
+  .player-card{
+    background: linear-gradient(160deg, var(--wine-deep), var(--wine));
+    border-radius: 20px;
+    padding: clamp(28px,5vw,48px);
+    color: var(--blush);
+    display:flex; flex-direction:column; align-items:center; gap:22px;
+    box-shadow: 0 40px 70px -30px rgba(60,20,32,0.55);
+  }
+  .vinyl{
+    width:150px; height:150px; border-radius:50%;
+    background: repeating-radial-gradient(circle at center, #1a0a0f 0 2px, #2a1218 2px 4px);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: inset 0 0 0 10px #170a0d, 0 10px 30px rgba(0,0,0,0.4);
+    animation: spin 6s linear infinite paused;
+  }
+  .vinyl.playing{ animation-play-state: running; }
+  .vinyl-center{ width:22px; height:22px; border-radius:50%; background: var(--gold); box-shadow:0 0 0 3px #170a0d; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .song-title{ font-family:'Marcellus',serif; font-size:26px; letter-spacing:0.03em; text-align:center; }
+  .song-sub{ font-size:16px; color:#e3c3bd; text-align:center; margin-top:-14px; }
+  .player-controls{ display:flex; align-items:center; gap:18px; }
+  .play-btn{
+    width:58px; height:58px; border-radius:50%; border:none; cursor:pointer;
+    background: var(--gold); color:var(--wine-deep); font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 20px -6px rgba(0,0,0,0.5);
+  }
+  .play-btn:hover{ transform: scale(1.07); }
+  .play-btn:active{ transform: scale(0.95); }
+  .progress-wrap{ width:100%; max-width:420px; display:flex; align-items:center; gap:10px; font-size:13px; color:#e3c3bd; }
+  .progress-bar{ flex:1; height:5px; border-radius:3px; background: rgba(255,255,255,0.18); overflow:hidden; cursor:pointer; }
+  .progress-fill{ height:100%; width:0%; background: var(--gold); }
+  .vol-row{ display:flex; align-items:center; gap:10px; width:100%; max-width:420px; font-size:13px; color:#e3c3bd; }
+  .vol-row input[type="range"]{ flex:1; accent-color: var(--gold); }
+  .audio-note{
+    font-size:14px; color:#e3c3bd; background: rgba(255,255,255,0.06);
+    border: 1px dashed rgba(255,255,255,0.25); border-radius:10px; padding:14px 16px; text-align:left; max-width:460px;
+  }
+  .audio-note code{ background: rgba(0,0,0,0.25); padding:2px 6px; border-radius:4px; }
+  .file-input-label{
+    font-size:14px; color: var(--wine-deep); background: var(--blush);
+    padding:9px 16px; border-radius: 20px; cursor:pointer; font-family:'Marcellus',serif;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .file-input-label:hover{ background:#fff; }
+
+  /* ---------- promises ---------- */
+  .promise-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap:20px; }
+  .promise-card{
+    background:#fffdfb; border:1px solid #ecd9d2; border-radius:14px; padding:26px 22px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .promise-card:hover{ transform: translateY(-6px); box-shadow: 0 20px 40px -22px rgba(91,31,43,0.3); }
+  .promise-card .num{ font-family:'Marcellus',serif; color:var(--rose); font-size:13px; letter-spacing:0.2em; margin-bottom:10px; display:block; }
+  .promise-card p{ font-size:19px; line-height:1.5; color:#3a1f22; }
+
+  /* ---------- reasons carousel ---------- */
+  .reasons-track-wrap{ overflow:hidden; }
+  .reasons-track{ display:flex; gap:18px; overflow-x:auto; padding-bottom:14px; scroll-snap-type:x mandatory; }
+  .reasons-track::-webkit-scrollbar{ height:6px; }
+  .reasons-track::-webkit-scrollbar-thumb{ background: var(--rose); border-radius:6px; }
+  .reason-card{
+    min-width:230px; scroll-snap-align:start;
+    background: linear-gradient(160deg,#fff,#fdece7);
+    border-radius:16px; padding:24px; border:1px solid #f0d9d3;
+    font-size:19px; color:#3a1f22; display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+
+  /* ---------- sorry button game ---------- */
+  .sorry-zone{
+    background: #fffdfb; border:1px solid #ecd9d2; border-radius:20px;
+    padding:50px 24px; text-align:center; position:relative; min-height:260px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; overflow:hidden;
+  }
+  .btn-row{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; position:relative; height:70px; width:100%; align-items:center; }
+  .btn{
+    padding:14px 34px; border-radius:40px; font-family:'Marcellus',serif; font-size:16px;
+    cursor:pointer; border:none; transition: all 0.15s ease;
+  }
+  .btn-yes{ background: var(--wine); color:#fff; }
+  .btn-yes:hover{ background: var(--wine-deep); transform: scale(1.05); }
+  .btn-no{ background: transparent; color: var(--rose); border:1px solid var(--rose); position:relative; }
+  #forgive-result{ font-size:24px; color:var(--wine-deep); font-family:'Marcellus',serif; min-height:34px; }
+  #heart-burst{ position:absolute; inset:0; pointer-events:none; }
+
+  /* ---------- footer ---------- */
+  footer{ text-align:center; padding: 60px 20px 90px; color:#8a5a56; font-size:15px; letter-spacing:0.04em; }
+  footer .heart{ color: var(--rose); }
+
+  @media (max-width:600px){
+    section{ padding: 80px 18px; }
+    .letter{ padding: 40px 20px; }
+  }
+
+  /* ---------- theme toggle ---------- */
+  .theme-toggle{
+    position:fixed; top:18px; right:18px; z-index:50;
+    width:46px; height:46px; border-radius:50%; border:1px solid rgba(0,0,0,0.08);
+    background:#fffdfb; cursor:pointer; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 8px 20px -8px rgba(91,31,43,0.35);
+    transition: transform 0.2s ease;
+  }
+  .theme-toggle:hover{ transform: scale(1.08); }
+  body.night{
+    background: #1c0f13;
+    color: #f3e3e0;
+  }
+  body.night .hero{
+    background: radial-gradient(ellipse at 50% 0%, #3c1420 0%, transparent 65%), linear-gradient(180deg, #1c0f13 0%, #150a0d 100%);
+  }
+  body.night .hero h1{ color: #f6d9d2; }
+  body.night .hero p.sub{ color: #d8b3ae; }
+  body.night .letter{ background:#241318; border-color:#3d1f26; }
+  body.night .letter p{ color:#f0dcd9; }
+  body.night .letter .sign{ color:#e3a89c; }
+  body.night .section-title{ color:#f6d9d2; }
+  body.night .promise-card, body.night .reason-card, body.night .sorry-zone, body.night .timeline-card, body.night .jar-card, body.night .reply-card{
+    background:#241318; border-color:#3d1f26; color:#f0dcd9;
+  }
+  body.night .promise-card p, body.night .reason-card{ color:#f0dcd9; }
+  body.night .theme-toggle{ background:#241318; border-color:#3d1f26; color:#f6d9d2; }
+  body.night footer{ color:#c9938d; }
+  body.night section{ color:#f0dcd9; }
+
+  /* ---------- timeline ---------- */
+  .timeline{ position:relative; padding-left: 28px; }
+  .timeline::before{
+    content:""; position:absolute; left:8px; top:6px; bottom:6px; width:2px;
+    background: linear-gradient(var(--rose), var(--gold));
+  }
+  .timeline-item{ position:relative; margin-bottom:34px; }
+  .timeline-item:last-child{ margin-bottom:0; }
+  .timeline-item::before{
+    content:""; position:absolute; left:-28px; top:4px; width:14px; height:14px; border-radius:50%;
+    background: var(--rose); box-shadow: 0 0 0 4px var(--blush);
+  }
+  .timeline-label{ font-family:'Marcellus',serif; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+  .timeline-card{ background:#fffdfb; border:1px solid #ecd9d2; border-radius:12px; padding:18px 22px; }
+  .timeline-card p{ font-size:19px; color:#3a1f22; }
+
+  /* ---------- memory jar ---------- */
+  .jar-card{
+    background:#fffdfb; border:1px solid #ecd9d2; border-radius:20px;
+    padding:50px 24px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:18px;
+  }
+  .jar-emoji{ font-size:64px; cursor:pointer; transition: transform 0.2s ease; user-select:none; }
+  .jar-emoji:hover{ transform: scale(1.1) rotate(-4deg); }
+  .jar-emoji:active{ transform: scale(0.95); }
+  #jarNote{
+    font-size:21px; color:var(--wine-deep); font-family:'Cormorant Garamond',serif; font-style:italic;
+    min-height:34px; max-width:480px; opacity:0; transition: opacity 0.4s ease;
+  }
+  #jarNote.show{ opacity:1; }
+  .jar-hint{ font-size:14px; color:#9a6a63; letter-spacing:0.05em; }
+
+  /* ---------- reply box ---------- */
+  .reply-card{
+    background:#fffdfb; border:1px solid #ecd9d2; border-radius:16px; padding: 32px clamp(20px,5vw,40px);
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .reply-card textarea{
+    width:100%; min-height:110px; resize:vertical; border:1px solid #ecd9d2; border-radius:10px;
+    padding:14px 16px; font-family:'Cormorant Garamond',serif; font-size:19px; color:var(--ink); background:#fffefc;
+  }
+  .reply-card textarea:focus{ outline:2px solid var(--rose); outline-offset:2px; }
+  .reply-actions{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .reply-btn{
+    background: var(--wine); color:#fff; border:none; padding:12px 28px; border-radius:30px;
+    font-family:'Marcellus',serif; cursor:pointer; font-size:15px;
+  }
+  .reply-btn:hover{ background: var(--wine-deep); }
+  #replyStatus{ font-size:14px; color:#9a6a63; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode">🌙</button>
+<div id="petals"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">A letter for you</div>
+  <h1>I'm sorry,<br><em>Timi jaan.</em></h1>
+  <p class="sub">Before anything else — I was wrong, and I know it. This little corner of the internet is just for you.</p>
+  <div class="script-line script">with all my heart, i'm sorry</div>
+  <div class="scroll-cue">scroll down ↓</div>
+</section>
+
+<!-- LETTER -->
+<section id="letter">
+  <div class="section-label">from me, to you</div>
+  <h2 class="section-title">My Timi</h2>
+  <div class="letter">
+    <p>I keep replaying it, and every time I do, I land in the same place: I hurt you, and you didn't deserve that. Not the words, not the way I said them, none of it.</p>
+    <p>You are the softest, most patient part of my life, and somewhere in the middle of my own mess, I forgot to be careful with your heart. That's on me, completely.</p>
+    <p>I'm not asking you to forget it happened. I'm just asking for the chance to be better than that moment — starting today, and every day after this one.</p>
+    <p>I love you far more than my temper, my pride, or my mistakes. Please let me show you.</p>
+    <p class="sign">— always yours</p>
+  </div>
+</section>
+
+<!-- SONG -->
+<section id="song">
+  <div class="section-label">our peace offering</div>
+  <h2 class="section-title">Maafi</h2>
+  <div class="player-card">
+    <div class="vinyl" id="vinyl"><div class="vinyl-center"></div></div>
+    <div>
+      <div class="song-title">Maafi</div>
+      <div class="song-sub">From "Pritam and Pedro" · Shreya Ghoshal</div>
+    </div>
+
+    <div class="player-controls">
+      <button class="play-btn" id="playBtn" aria-label="Play song">▶</button>
+    </div>
+
+    <div class="progress-wrap">
+      <span id="curTime">0:00</span>
+      <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      <span id="durTime">0:00</span>
+    </div>
+
+    <div class="vol-row">
+      <span>🔈</span>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.9">
+    </div>
+
+    <audio id="audio" preload="metadata"></audio>
+
+    <div class="audio-note">
+      <span id="audioNoteText"><strong>Step 1:</strong> tap below and pick the <em>Maafi</em> song file from your phone (download it once from YouTube/JioSaavn/Spotify to your device, then choose it here — this always works, no internet needed after that).</span>
+      <br><br>
+      <button type="button" class="file-input-label" id="chooseFileBtn" style="border:none;font-family:'Marcellus',serif;">📁 Choose the Maafi song</button>
+      <input type="file" id="localFile" accept="audio/*" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">
+    </div>
+
+    <a class="file-input-label" href="https://www.youtube.com/watch?v=Hr5BtPkylmA" target="_blank" rel="noopener" style="text-decoration:none;">▶ Or just listen to it on YouTube</a>
+  </div>
+</section>
+
+<!-- PROMISES -->
+<section id="promises">
+  <div class="section-label">what changes from here</div>
+  <h2 class="section-title">My Promises</h2>
+  <div class="promise-grid">
+    <div class="promise-card"><span class="num">01</span><p>I'll pause and think before I speak when I'm upset.</p></div>
+    <div class="promise-card"><span class="num">02</span><p>I'll say sorry the moment I know I'm wrong, not hours later.</p></div>
+    <div class="promise-card"><span class="num">03</span><p>I'll listen first, and actually hear you out.</p></div>
+    <div class="promise-card"><span class="num">04</span><p>I'll never let my ego matter more than your feelings.</p></div>
+    <div class="promise-card"><span class="num">05</span><p>I'll show up for the small things, every single day.</p></div>
+    <div class="promise-card"><span class="num">06</span><p>I'll keep choosing you, especially on the hard days.</p></div>
+  </div>
+</section>
+
+<!-- REASONS -->
+<section id="reasons">
+  <div class="section-label">just a few, out of many</div>
+  <h2 class="section-title">Why You</h2>
+  <div class="reasons-track-wrap">
+    <div class="reasons-track">
+      <div class="reason-card">Your laugh fixes my worst days.</div>
+      <div class="reason-card">You're patient with me even when I don't deserve it.</div>
+      <div class="reason-card">You make ordinary days feel like something.</div>
+      <div class="reason-card">You're honest with me, always.</div>
+      <div class="reason-card">You still choose me, again and again.</div>
+      <div class="reason-card">Home just feels like home because you're in it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="section-label">how we got here</div>
+  <h2 class="section-title">Us, So Far</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">where it started</div>
+      <div class="timeline-card"><p>The day it all began — I knew pretty quickly you were different.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">along the way</div>
+      <div class="timeline-card"><p>All the ordinary days that somehow became my favourite ones, just because you were there.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">right now</div>
+      <div class="timeline-card"><p>Me, trying to be better for you — starting today.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">what's next</div>
+      <div class="timeline-card"><p>Every day after this one, choosing you again.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMORY JAR -->
+<section id="jar">
+  <div class="section-label">a little game</div>
+  <h2 class="section-title">Open the Jar</h2>
+  <div class="jar-card">
+    <div class="jar-emoji" id="jarBtn" role="button" tabindex="0" aria-label="Open the memory jar">🫙</div>
+    <div class="jar-hint">tap the jar for a little something</div>
+    <div id="jarNote"></div>
+  </div>
+</section>
+
+<!-- SORRY BUTTON GAME -->
+<section id="ask">
+  <div class="section-label">one question</div>
+  <h2 class="section-title">Will you forgive me?</h2>
+  <div class="sorry-zone">
+    <div id="heart-burst"></div>
+    <div class="btn-row" id="btnRow">
+      <button class="btn btn-yes" id="yesBtn">Yes, I forgive you 🤍</button>
+      <button class="btn btn-no" id="noBtn">Not yet...</button>
+    </div>
+    <div id="forgive-result"></div>
+  </div>
+</section>
+
+<!-- REPLY BOX -->
+<section id="reply">
+  <div class="section-label">your turn, if you want</div>
+  <h2 class="section-title">Write Back to Me</h2>
+  <div class="reply-card">
+    <textarea id="replyText" placeholder="Say whatever you're feeling right now... I'll read every word."></textarea>
+    <div class="reply-actions">
+      <button class="reply-btn" id="copyReplyBtn">💌 Copy my reply</button>
+      <span id="replyStatus"></span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  made with a lot of sorry and even more love, for Timi <span class="heart">♥</span>
+</footer>
+
+<script>
+  // ---------- floating petals ----------
+  const petalLayer = document.getElementById('petals');
+  const petalChars = ['❀','❤','✿','♥'];
+  for(let i=0;i<22;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petalChars[Math.floor(Math.random()*petalChars.length)];
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.setProperty('--drift', (Math.random()*120-60)+'px');
+    p.style.fontSize = (14 + Math.random()*14) + 'px';
+    p.style.animationDuration = (10 + Math.random()*10) + 's';
+    p.style.animationDelay = (Math.random()*10) + 's';
+    p.style.color = Math.random() > 0.5 ? '#c96a5e' : '#b98a4e';
+    petalLayer.appendChild(p);
+  }
+
+  // ---------- audio player (plays whatever song file she/you choose) ----------
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('playBtn');
+  const vinyl = document.getElementById('vinyl');
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  const curTime = document.getElementById('curTime');
+  const durTime = document.getElementById('durTime');
+  const volume = document.getElementById('volume');
+  const localFile = document.getElementById('localFile');
+  const chooseFileBtn = document.getElementById('chooseFileBtn');
+  const audioNote = document.getElementById('audioNoteText');
+
+  chooseFileBtn.addEventListener('click', () => {
+    localFile.click();
+  });
+
+  function fmt(t){
+    if(!isFinite(t)) return '0:00';
+    const m = Math.floor(t/60);
+    const s = Math.floor(t%60).toString().padStart(2,'0');
+    return `${m}:${s}`;
+  }
+
+  audio.volume = volume.value;
+
+  playBtn.addEventListener('click', () => {
+    if(!audio.src){
+      audioNote.innerHTML = '👆 First tap "Choose the Maafi song" below, then hit play.';
+      return;
+    }
+    if(audio.paused){
+      audio.play().then(() => {
+        playBtn.textContent = '❚❚';
+        vinyl.classList.add('playing');
+      }).catch(() => {
+        audioNote.textContent = "⚠️ Couldn't start playback — try tapping play again.";
+      });
+    } else {
+      audio.pause();
+      playBtn.textContent = '▶';
+      vinyl.classList.remove('playing');
+    }
+  });
+
+  audio.addEventListener('ended', () => {
+    playBtn.textContent = '▶';
+    vinyl.classList.remove('playing');
+    progressFill.style.width = '0%';
+    curTime.textContent = '0:00';
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    durTime.textContent = fmt(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    curTime.textContent = fmt(audio.currentTime);
+    const pct = (audio.currentTime / audio.duration) * 100 || 0;
+    progressFill.style.width = pct + '%';
+  });
+
+  progressBar.addEventListener('click', (e) => {
+    if(!audio.src) return;
+    const rect = progressBar.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    if(isFinite(audio.duration)) audio.currentTime = pct * audio.duration;
+  });
+
+  volume.addEventListener('input', () => { audio.volume = volume.value; });
+
+  localFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(file){
+      const url = URL.createObjectURL(file);
+      audio.src = url;
+      audio.load();
+      audioNote.innerHTML = '✅ "' + file.name + '" is loaded — tap play!';
+      audio.play().then(() => {
+        playBtn.textContent = '❚❚';
+        vinyl.classList.add('playing');
+      }).catch(() => {});
+    }
+  });
+
+  // ---------- sorry button game ----------
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const btnRow = document.getElementById('btnRow');
+  const result = document.getElementById('forgive-result');
+  let dodgeCount = 0;
+  const dodgeLines = [
+    "hmm, are you sure?",
+    "come on, give me a chance 🥺",
+    "I'll keep asking...",
+    "one more try?",
+    "pretty please?"
+  ];
+
+  noBtn.addEventListener('mouseenter', dodge);
+  noBtn.addEventListener('touchstart', dodge, {passive:true});
+
+  function dodge(){
+    const rowRect = btnRow.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const maxX = rowRect.width - btnRect.width - 10;
+    const maxY = 30;
+    const x = Math.random() * maxX;
+    const y = (Math.random() * maxY) - (maxY/2);
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = y + 'px';
+    dodgeCount++;
+    result.textContent = dodgeLines[Math.min(dodgeCount-1, dodgeLines.length-1)];
+  }
+
+  yesBtn.addEventListener('click', () => {
+    result.textContent = "Thank you, Timi. I love you. 🤍";
+    burstHearts();
+  });
+
+  function burstHearts(){
+    const burst = document.getElementById('heart-burst');
+    for(let i=0;i<26;i++){
+      const h = document.createElement('div');
+      h.textContent = '♥';
+      h.style.position='absolute';
+      h.style.left = (40 + Math.random()*20) + '%';
+      h.style.top = '60%';
+      h.style.fontSize = (14 + Math.random()*18) + 'px';
+      h.style.color = Math.random() > 0.5 ? '#c96a5e' : '#b98a4e';
+      h.style.opacity = '1';
+      h.style.transition = 'transform 1.2s ease, opacity 1.2s ease';
+      burst.appendChild(h);
+      requestAnimationFrame(()=>{
+        const dx = (Math.random()*300-150);
+        const dy = -(150 + Math.random()*180);
+        h.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.random()*180-90}deg)`;
+        h.style.opacity = '0';
+      });
+      setTimeout(()=>h.remove(), 1300);
+    }
+  }
+
+  // ---------- theme toggle ----------
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('night');
+    themeToggle.textContent = document.body.classList.contains('night') ? '☀️' : '🌙';
+  });
+
+  // ---------- memory jar ----------
+  const jarBtn = document.getElementById('jarBtn');
+  const jarNote = document.getElementById('jarNote');
+  const jarNotes = [
+    "You make the ordinary days feel like something.",
+    "I'm proud to call you mine.",
+    "Thank you for being patient with me.",
+    "I still get lucky every time you smile at me.",
+    "You're my favourite person, on my best days and my worst.",
+    "I'm sorry, and I mean it more than these words show.",
+    "Home isn't a place, it's you.",
+    "I'll keep showing up for you, always."
+  ];
+  let lastJarIndex = -1;
+  function openJar(){
+    let i = Math.floor(Math.random() * jarNotes.length);
+    if(i === lastJarIndex) i = (i + 1) % jarNotes.length;
+    lastJarIndex = i;
+    jarNote.classList.remove('show');
+    setTimeout(() => {
+      jarNote.textContent = '"' + jarNotes[i] + '"';
+      jarNote.classList.add('show');
+    }, 150);
+  }
+  jarBtn.addEventListener('click', openJar);
+  jarBtn.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openJar(); }
+  });
+
+  // ---------- reply box ----------
+  const replyText = document.getElementById('replyText');
+  const copyReplyBtn = document.getElementById('copyReplyBtn');
+  const replyStatus = document.getElementById('replyStatus');
+  copyReplyBtn.addEventListener('click', async () => {
+    const text = replyText.value.trim();
+    if(!text){
+      replyStatus.textContent = 'Write something first 🤍';
+      return;
+    }
+    try{
+      await navigator.clipboard.writeText(text);
+      replyStatus.textContent = 'Copied — paste it back to me anywhere 💌';
+    } catch(err){
+      replyStatus.textContent = 'Select the text above and copy it manually.';
+    }
+  });
+</script>
+</body>
+</html>
